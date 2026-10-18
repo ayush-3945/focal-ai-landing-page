@@ -2,11 +2,14 @@
 
 An Awwwards-inspired, high-performance cinematic landing page for **Focal** — an intelligent desk companion designed to protect deep focus hours and quiet notifications.
 
+[![Live Demo](https://img.shields.io/badge/Demo-Live%20on%20Vercel-success?style=flat&logo=vercel)](https://focal-ai-landing-page.vercel.app)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![React](https://img.shields.io/badge/React-18.3-61dafb.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178c6.svg)
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-38bdf8.svg)
 ![Vite](https://img.shields.io/badge/Vite-5.4-646cff.svg)
+
+> 🚀 **Live Demo:** [https://focal-ai-landing-page.vercel.app](https://focal-ai-landing-page.vercel.app)
 
 ---
 
