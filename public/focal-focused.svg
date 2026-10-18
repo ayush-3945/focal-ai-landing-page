@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="58%" r="70%">
+      <stop offset="0" stop-color="#2b2118"/>
+      <stop offset="0.5" stop-color="#0d0b0a"/>
+      <stop offset="1" stop-color="#030303"/>
+    </radialGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8a8596"/>
+      <stop offset="0.45" stop-color="#3b3848"/>
+      <stop offset="1" stop-color="#14121b"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/>
+      <stop offset="0.3" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="lens" cx="50%" cy="45%" r="60%">
+      <stop offset="0" stop-color="#ffb27a"/>
+      <stop offset="0.45" stop-color="#e8702a"/>
+      <stop offset="1" stop-color="#7a2e0c"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#e8702a" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#e8702a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <circle cx="800" cy="510" r="420" fill="url(#halo)"/>
+  <g fill="none" stroke="#e8702a" stroke-opacity="0.35">
+    <circle cx="800" cy="510" r="250" stroke-width="1"/>
+    <circle cx="800" cy="510" r="330" stroke-width="1" stroke-dasharray="3 9"/>
+    <circle cx="800" cy="510" r="410" stroke-width="1" stroke-opacity="0.18"/>
+  </g>
+  <g stroke="#ffffff" stroke-opacity="0.35" stroke-width="2">
+    <path d="M520 250 h-40 v40"/><path d="M1080 250 h40 v40"/>
+    <path d="M520 770 h-40 v-40"/><path d="M1080 770 h40 v-40"/>
+  </g>
+  <ellipse cx="800" cy="720" rx="260" ry="22" fill="#000" opacity="0.6"/>
+  <rect x="620" y="360" width="360" height="300" rx="150" fill="url(#body)"/>
+  <rect x="620" y="360" width="360" height="300" rx="150" fill="url(#rim)"/>
+  <rect x="620" y="360" width="360" height="300" rx="150" fill="none" stroke="#ffffff" stroke-opacity="0.18" stroke-width="2"/>
+  <circle cx="800" cy="510" r="96" fill="#07060a" stroke="#ffffff" stroke-opacity="0.15" stroke-width="2"/>
+  <circle cx="800" cy="510" r="60" fill="url(#lens)"/>
+  <circle cx="800" cy="510" r="22" fill="#fff6ee" opacity="0.95"/>
+  <circle cx="780" cy="488" r="9" fill="#ffffff" opacity="0.7"/>
+</svg>
