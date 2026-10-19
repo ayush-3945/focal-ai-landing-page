@@ -68,11 +68,33 @@ const SPANS = [
   'lg:col-span-2',
 ];
 
+const STORAGE_KEY_ACTIVE = 'focal_active_mode';
+const STORAGE_KEY_RULES = 'focal_mode_rules';
+
 export default function Features() {
-  const [active, setActive] = useState(MODES[0].id);
-  const [rules, setRules] = useState<Record<string, Rules>>(() =>
-    Object.fromEntries(MODES.map((m) => [m.id, { ...m.rules }]))
-  );
+  const [active, setActive] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY_ACTIVE);
+        if (saved && MODES.some((m) => m.id === saved)) return saved;
+      } catch {}
+    }
+    return MODES[0].id;
+  });
+
+  const [rules, setRules] = useState<Record<string, Rules>>(() => {
+    const defaults = Object.fromEntries(MODES.map((m) => [m.id, { ...m.rules }]));
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY_RULES);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          return { ...defaults, ...parsed };
+        }
+      } catch {}
+    }
+    return defaults;
+  });
 
   const mode = MODES.find((m) => m.id === active) ?? MODES[0];
   const current = rules[mode.id];
@@ -81,9 +103,32 @@ export default function Features() {
   const pct = Math.round((kept / total) * 100);
   const ModeIcon = mode.icon;
 
-  const cycle = (id: CatId) =>
-    setRules((r) => ({ ...r, [mode.id]: { ...r[mode.id], [id]: NEXT[r[mode.id][id]] } }));
-  const reset = () => setRules((r) => ({ ...r, [mode.id]: { ...mode.rules } }));
+  const handleModeChange = (id: string) => {
+    setActive(id);
+    try {
+      localStorage.setItem(STORAGE_KEY_ACTIVE, id);
+    } catch {}
+  };
+
+  const cycle = (id: CatId) => {
+    setRules((r) => {
+      const nextRules = { ...r, [mode.id]: { ...r[mode.id], [id]: NEXT[r[mode.id][id]] } };
+      try {
+        localStorage.setItem(STORAGE_KEY_RULES, JSON.stringify(nextRules));
+      } catch {}
+      return nextRules;
+    });
+  };
+
+  const reset = () => {
+    setRules((r) => {
+      const nextRules = { ...r, [mode.id]: { ...mode.rules } };
+      try {
+        localStorage.setItem(STORAGE_KEY_RULES, JSON.stringify(nextRules));
+      } catch {}
+      return nextRules;
+    });
+  };
 
   return (
     <section id="features" className="relative z-10 text-white px-5 sm:px-10 md:px-14 pt-32 sm:pt-44 pb-24 sm:pb-32">
@@ -106,7 +151,7 @@ export default function Features() {
             return (
               <button
                 key={m.id}
-                onClick={() => setActive(m.id)}
+                onClick={() => handleModeChange(m.id)}
                 onMouseMove={glowMove}
                 aria-pressed={on}
                 className={`glow-card text-left rounded-2xl border p-4 sm:p-5 transition-all duration-300 hover:-translate-y-1 ${
@@ -140,9 +185,14 @@ export default function Features() {
               <div className="mt-4 h-1.5 rounded-full bg-white/10 overflow-hidden">
                 <div className="h-full rounded-full bg-gradient-to-r from-[#e8702a] to-amber-300 shadow-[0_0_10px_#e8702a] transition-[width] duration-700 ease-out" style={{ width: `${pct}%` }} />
               </div>
-              <button onClick={reset} className="mt-5 inline-flex items-center gap-2 text-xs text-white/60 hover:text-white transition-colors">
-                <RotateCcw size={14} /> Reset this mode
-              </button>
+              <div className="mt-5 flex items-center justify-between">
+                <button onClick={reset} className="inline-flex items-center gap-2 text-xs text-white/60 hover:text-white transition-colors">
+                  <RotateCcw size={14} /> Reset this mode
+                </button>
+                <span className="text-[11px] text-emerald-400/80 font-mono flex items-center gap-1.5 bg-emerald-400/10 px-2.5 py-0.5 rounded-full border border-emerald-400/20">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> Saved locally
+                </span>
+              </div>
             </div>
           </div>
 

@@ -38,22 +38,38 @@ function SenseVisual() {
   );
 }
 
+const STORAGE_KEY_FILTER_ITEMS = 'focal_demo_filter_items';
+type FilterItem = { app: string; text: string; tag: string; tone: string };
+const DEFAULT_FILTER_ITEMS: FilterItem[] = [
+  { app: 'Slack', text: '#general: lunch?', tag: 'Hold', tone: 'text-amber-300 bg-amber-400/20 border-amber-300/40 shadow-[0_0_10px_rgba(251,191,36,0.3)]' },
+  { app: 'Mail', text: 'Weekly newsletter', tag: 'Block', tone: 'text-rose-300 bg-rose-400/20 border-rose-300/40 shadow-[0_0_10px_rgba(244,63,94,0.3)]' },
+  { app: 'Phone', text: 'Mum is calling', tag: 'Allow', tone: 'text-emerald-300 bg-emerald-400/20 border-emerald-300/40 shadow-[0_0_10px_rgba(52,211,153,0.3)]' },
+];
+
 function FilterVisual() {
-  const [items, setItems] = useState([
-    { app: 'Slack', text: '#general: lunch?', tag: 'Hold', tone: 'text-amber-300 bg-amber-400/20 border-amber-300/40 shadow-[0_0_10px_rgba(251,191,36,0.3)]' },
-    { app: 'Mail', text: 'Weekly newsletter', tag: 'Block', tone: 'text-rose-300 bg-rose-400/20 border-rose-300/40 shadow-[0_0_10px_rgba(244,63,94,0.3)]' },
-    { app: 'Phone', text: 'Mum is calling', tag: 'Allow', tone: 'text-emerald-300 bg-emerald-400/20 border-emerald-300/40 shadow-[0_0_10px_rgba(52,211,153,0.3)]' },
-  ]);
+  const [items, setItems] = useState<FilterItem[]>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY_FILTER_ITEMS);
+        if (saved) return JSON.parse(saved);
+      } catch {}
+    }
+    return DEFAULT_FILTER_ITEMS;
+  });
 
   const cycle = (idx: number) => {
-    setItems((prev) =>
-      prev.map((it, i) => {
+    setItems((prev: FilterItem[]) => {
+      const next = prev.map((it, i) => {
         if (i !== idx) return it;
         if (it.tag === 'Hold') return { ...it, tag: 'Block', tone: 'text-rose-300 bg-rose-400/20 border-rose-300/40 shadow-[0_0_10px_rgba(244,63,94,0.3)]' };
         if (it.tag === 'Block') return { ...it, tag: 'Allow', tone: 'text-emerald-300 bg-emerald-400/20 border-emerald-300/40 shadow-[0_0_10px_rgba(52,211,153,0.3)]' };
         return { ...it, tag: 'Hold', tone: 'text-amber-300 bg-amber-400/20 border-amber-300/40 shadow-[0_0_10px_rgba(251,191,36,0.3)]' };
-      })
-    );
+      });
+      try {
+        localStorage.setItem(STORAGE_KEY_FILTER_ITEMS, JSON.stringify(next));
+      } catch {}
+      return next;
+    });
   };
 
   return (
